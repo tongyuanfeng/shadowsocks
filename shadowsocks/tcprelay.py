@@ -17,7 +17,7 @@
 
 from __future__ import absolute_import, division, print_function, \
     with_statement
-
+import os
 import time
 import socket
 import errno
@@ -39,16 +39,7 @@ trust_ip_list = []
 know_ip_list = []
 block_ip_list = []
 
-#-*-coding:utf-8-*-
-import os
-import sys
-import  logging
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
-
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ecs.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gateway.settings")
 
 import datetime
 import django
@@ -60,9 +51,7 @@ from gateapp.models import *
 from django.forms.models import model_to_dict
 from django.core import serializers
 
-import pandas as pd
-import numpy as np
-import numpy as np
+
 from django.db.models import Q
 
 
@@ -385,11 +374,11 @@ class TCPRelayHandler(object):
 
                 if ip not in block_ip_list:
                     if ip not in know_ip_list:
+                        logging.info('ip= %s,know_ip_list' % ip)
                         know_ip_list.append(ip)
                         obj,st = access_vpn_ip_list.objects.update_or_create(ip=ip)
-                        if not st:
-                            obj.status = 0
-                            obj.save()
+                        obj.status = 0
+                        obj.save()
                     import redis
                     client = redis.Redis(host='127.0.0.1', port=6379, db=0)
                     trust_ip_list = eval(client.get('trust_ip_list'))
