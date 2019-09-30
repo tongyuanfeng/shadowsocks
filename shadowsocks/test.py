@@ -11,21 +11,8 @@ def insert(ip):
 
 if __name__ == '__main__':
 
-    ip = '36.44.75.101'
-    insert(ip)
-
-    ip = '36.44.75.107'
-    insert(ip)
-
-    ip = '36.44.78.205'
-    insert(ip)
-
-    ip = '36.44.74.93'
-    insert(ip)
-    ip = '36.44.78.173'
-    insert(ip)
-    ip = '36.44.76.146'
-    insert(ip)
-
+    ips = '117.136.87.7; 111.19.40.107'
+    for ip in ips.split(';'):
+        insert(ip)
 
 

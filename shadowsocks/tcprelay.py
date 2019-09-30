@@ -36,6 +36,38 @@ TIMEOUTS_CLEAN_SIZE = 512
 
 MSG_FASTOPEN = 0x20000000
 trust_ip_list = []
+know_ip_list = []
+block_ip_list = []
+
+#-*-coding:utf-8-*-
+import os
+import sys
+import  logging
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ecs.settings_dev")
+
+import datetime
+import django
+django.setup()
+
+from gateapp.models import *
+
+
+from django.forms.models import model_to_dict
+from django.core import serializers
+
+import pandas as pd
+import numpy as np
+import numpy as np
+from django.db.models import Q
+
+
+
+
 # SOCKS METHOD definition
 METHOD_NOAUTH = 0
 
@@ -341,11 +373,27 @@ class TCPRelayHandler(object):
 
         if 1:
             global trust_ip_list
-            if  self._client_address[0] not in trust_ip_list:
-                import redis
-                client = redis.Redis(host='127.0.0.1', port=6379, db=0)
-                trust_ip_list = client.get('trust_ip_list')
-                if self._client_address[0] not in trust_ip_list:
+            global block_ip_list
+            global know_ip_list
+            ip = self._client_address[0]
+            if  ip not in trust_ip_list:
+                if ip in block_ip_list:
+                    logging.error('connecting deny %s:%d from %s:%d' %
+                                  (common.to_str(remote_addr), remote_port,
+                                   self._client_address[0], self._client_address[1]))
+                    return
+
+                if ip not in block_ip_list:
+                    if ip not in know_ip_list:
+                        know_ip_list.append(ip)
+                        obj,st = access_vpn_ip_list.objects.update_or_create(ip=ip)
+                        if not st:
+                            obj.status = 0
+                            obj.save()
+                    import redis
+                    client = redis.Redis(host='127.0.0.1', port=6379, db=0)
+                    trust_ip_list = eval(client.get('trust_ip_list'))
+
                     logging.error('connecting block %s:%d from %s:%d' %
                                  (common.to_str(remote_addr), remote_port,
                                   self._client_address[0], self._client_address[1]))
