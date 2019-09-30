@@ -374,7 +374,6 @@ class TCPRelayHandler(object):
 
                 if ip not in block_ip_list:
                     if ip not in know_ip_list:
-                        logging.info('ip= %s,know_ip_list' % ip)
                         know_ip_list.append(ip)
                         obj,st = access_vpn_ip_list.objects.update_or_create(ip=ip)
                         obj.status = 0
@@ -388,6 +387,7 @@ class TCPRelayHandler(object):
                         logging.error('connecting block %s:%d from %s:%d' %
                                      (common.to_str(remote_addr), remote_port,
                                       self._client_address[0], self._client_address[1]))
+                        self.destroy()
                         return
 
 
