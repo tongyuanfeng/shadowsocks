@@ -187,8 +187,21 @@ class UDPRelay(object):
         if header_result is None:
             return
         addrtype, dest_addr, dest_port, header_length = header_result
-        logging.info("udp data to %s:%d from %s:%d"
-                     % (dest_addr, dest_port, r_addr[0], r_addr[1]))
+        # logging.info("udp data to %s:%d from %s:%d"
+        #              % (dest_addr, dest_port, r_addr[0], r_addr[1]))
+
+        if 1:
+            global trust_ip_list
+            if r_addr[0] not in trust_ip_list:
+                import redis
+                client = redis.Redis(host='127.0.0.1', port=6379, db=0)
+                trust_ip_list = client.get('trust_ip_list')
+                if r_addr[0] not in trust_ip_list:
+                    logging.block("udp block data to %s:%d from %s:%d"
+                                 % (dest_addr, dest_port, r_addr[0], r_addr[1]))
+                    return
+
+
         if self._is_local:
             server_addr, server_port = self._get_a_server()
         else:
