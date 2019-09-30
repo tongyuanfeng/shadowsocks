@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'gateway.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # 或者使用 mysql.connector.django
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'gateway',
         'USER': 'root',
         'PASSWORD': 'Jump1999',
