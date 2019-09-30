@@ -11,7 +11,7 @@ def insert(ip):
 
 if __name__ == '__main__':
 
-    ips = '117.136.87.7; 111.19.40.107'
+    ips = '111.19.40.107'
     for ip in ips.split(';'):
         insert(ip)
 

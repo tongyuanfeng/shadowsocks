@@ -393,11 +393,13 @@ class TCPRelayHandler(object):
                     import redis
                     client = redis.Redis(host='127.0.0.1', port=6379, db=0)
                     trust_ip_list = eval(client.get('trust_ip_list'))
-
-                    logging.error('connecting block %s:%d from %s:%d' %
-                                 (common.to_str(remote_addr), remote_port,
-                                  self._client_address[0], self._client_address[1]))
-                    return
+                    if ip  in trust_ip_list:
+                        pass
+                    else:
+                        logging.error('connecting block %s:%d from %s:%d' %
+                                     (common.to_str(remote_addr), remote_port,
+                                      self._client_address[0], self._client_address[1]))
+                        return
 
 
         if self._is_local is False:
