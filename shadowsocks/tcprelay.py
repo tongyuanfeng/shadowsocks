@@ -48,7 +48,7 @@ sys.setdefaultencoding('utf-8')
 
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ecs.settings_dev")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ecs.settings")
 
 import datetime
 import django
