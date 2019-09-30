@@ -74,7 +74,7 @@ from shadowsocks.common import parse_header, pack_addr, onetimeauth_verify, \
 
 
 BUF_SIZE = 65536
-
+trust_ip_list = []
 
 def client_key(source_addr, server_af):
     # notice this is server af, not dest af
