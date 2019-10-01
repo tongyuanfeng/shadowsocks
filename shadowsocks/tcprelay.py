@@ -42,19 +42,6 @@ block_ip_list = []
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gateway.settings")
 
 import datetime
-import django
-django.setup()
-
-from gateapp.models import *
-
-
-from django.forms.models import model_to_dict
-from django.core import serializers
-
-
-from django.db.models import Q
-
-
 
 
 # SOCKS METHOD definition
@@ -375,6 +362,9 @@ class TCPRelayHandler(object):
                 if ip not in block_ip_list:
                     if ip not in know_ip_list:
                         know_ip_list.append(ip)
+                        import django
+                        django.setup()
+                        from gateapp.models import *
                         obj,st = access_vpn_ip_list.objects.update_or_create(ip=ip)
                         obj.status = 0
                         obj.save()
